@@ -2,9 +2,6 @@ from bs4 import BeautifulSoup
 import requests
 import os
 
-def is_page_opened(soup):
-	pass
-
 def request():
 	session = requests.Session()
 	cookies = get_cookie(session)
@@ -20,10 +17,9 @@ def request():
 		"Referer": "https://rdv-etrangers-94.interieur.gouv.fr/eAppointmentpref94/element/jsp/appointment.jsp",
 		"Content-Type": "text/plain",
 		"Content-Length": "296",
-		"DNT": "1",
 		"Connection": "keep-alive",
-		"Cookie": "JSESSIONID={0}; ID_ROUTE_GFA={1}"
-			.format(cookies["JSESSIONID"], cookies["ID_ROUTE_GFA"]),
+		"Cookie": "JSESSIONID={}; ID_ROUTE_GFA=.worker_gfa1"
+			.format(cookies["JSESSIONID"]),
 		"Pragma": "no-cache",
 		"Cache-Control": "no-cache"
 	}
@@ -31,7 +27,7 @@ def request():
 		"callCount": 1,
 		"page": "/eAppointmentpref94/element/jsp/appointment.jsp",
 		"httpSessionId": "",
-		"scriptSessionId": "C7DAA0AB832D599220AC575914E1CB13571",
+		"scriptSessionId": "",
 		"c0-scriptName": "AjaxMotive",
 		"c0-methodName": "motiveMultiSiteSubmit",
 		"c0-id": "0",
@@ -43,8 +39,6 @@ def request():
 	res = session.post(url_to_parse, headers=headers, data=payload)
 	if res.status_code == 200:
 		return BeautifulSoup(res.text, "html.parser")
-	else:
-		print(res.status_code)
 	return None
 
 def get_cookie(session):
