@@ -12,6 +12,8 @@ def crawl(url_to_send, criterias, request):
 	if is_page_opened(soup, criterias):
 		message = "체류증 ㄱㄱ!! {}".format(url_to_send)
 		send_message(message)
+	else:
+		print(soup.text)
 	return
 
 def is_page_opened(soup, criterias):
