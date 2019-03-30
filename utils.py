@@ -9,7 +9,7 @@ def crawl(url_to_send, criterias, request):
 		message = "Prefecture 사이트 막힘"
 		send_message(message)
 		return
-	if not is_page_opened(soup, criterias):
+	if is_page_opened(soup, criterias):
 		message = "체류증 ㄱㄱ!! {}".format(url_to_send)
 		send_message(message)
 	else:
