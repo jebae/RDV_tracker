@@ -9,7 +9,7 @@ def crawl(url_to_send, criterias, request):
 		message = "Prefecture 사이트 막힘"
 		send_message(message)
 		return
-	if is_page_opened(soup, criterias):
+	if not is_page_opened(soup, criterias):
 		message = "체류증 ㄱㄱ!! {}".format(url_to_send)
 		send_message(message)
 	else:
@@ -28,11 +28,12 @@ def is_page_opened(soup, criterias):
 def send_message(message):
 	LINE_ACCESS_TOKEN = os.environ["LINE_ACCESS_TOKEN"]
 	LINE_API_URL = os.environ["LINE_API_URL"]
-	headers = {
-		"Authorization" : "Bearer {}".format(LINE_ACCESS_TOKEN)
-	}
 	payload = {
 		"message": message
 	}
-	res = requests.post(LINE_API_URL, data=payload, headers=headers)
+	for token in LINE_ACCESS_TOKEN.split(","):
+		headers = {
+			"Authorization" : "Bearer {}".format(token)
+		}
+		res = requests.post(LINE_API_URL, data=payload, headers=headers)
 	return
