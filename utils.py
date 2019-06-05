@@ -2,6 +2,7 @@ from bs4 import BeautifulSoup
 import requests
 import os
 import json
+import datetime
 
 def crawl(url_to_send, criterias, request):
 	soup = request()
@@ -13,7 +14,7 @@ def crawl(url_to_send, criterias, request):
 		message = "체류증 ㄱㄱ!! {}".format(url_to_send)
 		send_message(message)
 	else:
-		print(soup.text)
+		print(datetime.datetime.now(), "not available")
 	return
 
 def is_page_opened(soup, criterias):

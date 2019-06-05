@@ -5,7 +5,10 @@ def crawl_92():
 	from _92_ import request
 	
 	url_to_send = os.environ["URL_TO_SEND_92"]
-	criterias = ["Aucun rendez-vous n'est disponible"]
+	criterias = [
+		"Aucun rendez-vous n'est disponible",
+		"vous reconnecter"
+	]
 	crawl(url_to_send, criterias, request)
 	return
 
