@@ -2,17 +2,19 @@ from bs4 import BeautifulSoup
 import requests
 import os
 import json
+import smtplib
 import datetime
+from email.mime.text import MIMEText
+from email.mime.multipart import MIMEMultipart
 
-def crawl(url_to_send, criterias, request):
+def crawl(criterias, request, message):
 	soup = request()
 	if not soup:
-		message = "Prefecture 사이트 막힘"
-		send_message(message)
+		message = "사이트 막힘"
+		send_email(message, os.environ["ADMIN_USER"])
 		return
-	if is_page_opened(soup, criterias):
-		message = "체류증 ㄱㄱ!! {}".format(url_to_send)
-		send_message(message)
+	if not is_page_opened(soup, criterias):
+		send_email(message, os.environ["CLIENT"])
 	else:
 		print(datetime.datetime.now(), "not available")
 	return
@@ -26,15 +28,19 @@ def is_page_opened(soup, criterias):
 			return False
 	return True
 
-def send_message(message):
-	LINE_ACCESS_TOKEN = os.environ["LINE_ACCESS_TOKEN"]
-	LINE_API_URL = os.environ["LINE_API_URL"]
-	payload = {
-		"message": message
-	}
-	for token in LINE_ACCESS_TOKEN.split(","):
-		headers = {
-			"Authorization" : "Bearer {}".format(token)
-		}
-		res = requests.post(LINE_API_URL, data=payload, headers=headers)
-	return
+def send_email(message, to):
+	ADMIN_USER = os.environ["ADMIN_USER"]
+	ADMIN_PASSWORD = os.environ["ADMIN_PASSWORD"]
+	
+	server = smtplib.SMTP("smtp.gmail.com", 587)
+	server.ehlo()
+	server.starttls()
+	server.login(ADMIN_USER, ADMIN_PASSWORD)
+	mail_content = MIMEMultipart()
+	mail_content["Subject"] = "RDV 열렸어용"
+	mail_content["From"] = ADMIN_USER
+	mail_content["To"] = to
+	message = MIMEText(message, "plain")
+	mail_content.attach(message)
+	server.sendmail(ADMIN_USER, to, mail_content.as_string())
+	server.close()
