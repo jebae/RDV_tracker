@@ -2,3 +2,4 @@ venv/
 *.sh
 *.*.swp
 __pycache__/
+*.sh

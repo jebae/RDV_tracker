@@ -19,3 +19,9 @@ def crawl_94():
 	criterias = ["Aucun rendez-vous n\\'est disponible", 'message:"Error"']
 	crawl(url_to_send, criterias, request)
 	return
+
+def crawl_mariage():
+	from mariage import request
+
+	res = request()
+	print(res.getText())
