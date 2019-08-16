@@ -10,8 +10,7 @@ from email.mime.multipart import MIMEMultipart
 def crawl(criterias, request, message):
     soup = request()
     if not soup:
-        message = "사이트 막힘"
-        send_email(message, os.environ["ADMIN_USER"])
+        print(datetime.datetime.now(), "site closed")
         return
     if is_page_opened(soup, criterias):
         send_email(message, os.environ["CLIENT"])
