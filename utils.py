@@ -14,7 +14,6 @@ def crawl(criterias, request, message):
         return
     if is_page_opened(soup, criterias):
         send_email(message, os.environ["CLIENT"])
-        send_email(message, os.environ["ADMIN_USER"])
     else:
         print(datetime.datetime.now(), "not available")
     return
@@ -42,5 +41,7 @@ def send_email(message, to):
     mail_content["To"] = to
     message = MIMEText(message, "plain")
     mail_content.attach(message)
-    server.sendmail(GMAIL_USER, to, mail_content.as_string())
+    server.sendmail(
+		GMAIL_USER, to.split(", "), mail_content.as_string()
+	)
     server.close()
